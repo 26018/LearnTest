@@ -1,9 +1,12 @@
 package top.fixyou.netty.redisclient.handler;
 
-import io.netty.buffer.Unpooled;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPromise;
 import lombok.extern.slf4j.Slf4j;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Lsk
@@ -12,22 +15,26 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-public class ProcessHandler extends ChannelInboundHandlerAdapter {
+public class ProcessHandler extends ChannelDuplexHandler {
+
+
+    @Override
+    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+        ByteBuf byteBuf = (ByteBuf) msg;
+
+        log.info("write:{}", (byteBuf.toString(StandardCharsets.UTF_8)));
+        ctx.write(byteBuf, promise);
+
+    }
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("读：" + msg);
+        log.info("read:{}", msg);
+        ctx.fireChannelRead(msg);
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("读完了");
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.info("ex:{}", cause.getMessage());
     }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        String cmd = "*2\\r\\n$4\\r\\nLLEN\\r\\n$6\\r\\nmylist\\r\\n";
-        System.out.println("发送数据:" + cmd);
-        ctx.write(Unpooled.copiedBuffer(cmd.getBytes()));
-    }
-
 }
