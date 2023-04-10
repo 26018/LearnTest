@@ -5,6 +5,7 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import lombok.extern.slf4j.Slf4j;
+import top.fixyou.netty.redisclient.util.ResponseParser;
 
 import java.nio.charset.StandardCharsets;
 
@@ -19,22 +20,27 @@ public class ProcessHandler extends ChannelDuplexHandler {
 
 
     @Override
+
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
-
-        log.info("write:{}", (byteBuf.toString(StandardCharsets.UTF_8)));
+//        log.info("write original:{}", (byteBuf.toString(StandardCharsets.UTF_8)));
         ctx.write(byteBuf, promise);
-
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        log.info("read:{}", msg);
-        ctx.fireChannelRead(msg);
+        if (msg instanceof String) {
+            return;
+        }
+        ByteBuf byteBuf = (ByteBuf) msg;
+        String string = byteBuf.toString(StandardCharsets.UTF_8);
+        String parse = ResponseParser.parse(string.split("\r\n"));
+        System.out.println("> " + parse);
+        ctx.fireChannelRead(byteBuf);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.info("ex:{}", cause.getMessage());
+        cause.printStackTrace();
     }
 }
