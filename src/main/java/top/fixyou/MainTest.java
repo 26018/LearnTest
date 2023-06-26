@@ -1,5 +1,6 @@
 package top.fixyou;
 
+import cn.hutool.extra.ssh.JschUtil;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -21,13 +22,11 @@ import java.util.stream.Collectors;
 public class MainTest {
 
     public static void main(String[] args) throws IOException, JSchException {
-//        com.jcraft.jsch.Session remoteSession = JschUtil.getSession("fixyou.top", 22, "root", "TXljh257248");
-//        List<Double> doubles = doCmd(remoteSession,
-//                "top -b -n1 | fgrep \"Cpu(s)\" | awk '{printf \"%d\\n\",100-$8}'"
-//        );
-//        System.out.println(doubles);
-        int state = 400;
-        System.out.println(!(state == 400 || state == 200 || state == 500));
+        com.jcraft.jsch.Session remoteSession = JschUtil.getSession("fixyou.top", 22, "root", "TXljh257248");
+        List<Double> doubles = doCmd(remoteSession,
+                "top -b -n1 | fgrep \"Cpu(s)\" | awk '{printf \"%d\\n\",100-$8}'"
+        );
+        System.out.println(doubles);
     }
 
     public static List<Double> doCmd(Session session, String... cmds) throws JSchException, IOException {
@@ -46,8 +45,4 @@ public class MainTest {
         System.out.println(allCmd);
         return result.stream().map(str -> Double.valueOf(str.replace("%", ""))).collect(Collectors.toList());
     }
-
-//  top -n1 | fgrep "Cpu(s)" | awk '{printf "%d\n",100-$8}' && free -m | fgrep "Mem" | awk '{printf "%d\n", ($3)/$2*100}'  &&  df -h | fgrep "/dev/vda1" | awk '{print $5}'
-
-
 }
