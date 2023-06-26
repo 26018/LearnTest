@@ -29,7 +29,6 @@ public class MessageFirstInBoundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         log.info("读取完成：{}", Arrays.toString(new List[]{content}));
-
     }
 
     @Override

@@ -9,11 +9,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 import top.fixyou.netty.server.decode.Decoder;
-import top.fixyou.netty.server.encode.Encoder;
-import top.fixyou.netty.server.handler.MessageFirstInBoundHandler;
 
 import java.net.InetSocketAddress;
 
@@ -40,10 +37,11 @@ public class ServerBootStrap {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024 * 8, buffer));
                         ch.pipeline().addLast(new Decoder());
-                        ch.pipeline().addLast(new MessageFirstInBoundHandler());
-                        ch.pipeline().addLast(new Encoder());
+//                        ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024 * 8, buffer));
+//                        ch.pipeline().addLast(new Decoder());
+//                        ch.pipeline().addLast(new MessageFirstInBoundHandler());
+//                        ch.pipeline().addLast(new Encoder());
 //                        ch.pipeline().addLast(new MessageSecondInBoundHandler());
                     }
                 });

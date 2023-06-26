@@ -6,7 +6,6 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,15 +19,6 @@ public class Decoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-
-        String string = byteBuf.toString(StandardCharsets.UTF_8);
-        byteBuf.readerIndex(string.getBytes().length);
-        list.add(string);
-
-        log.info("\n=====解码=====");
-        log.info("message:{}", byteBuf.toString(StandardCharsets.UTF_8));
-        log.info("List:{}", Arrays.toString(new List[]{list}));
-        log.info("====解码完成====\n");
-
+        System.out.println(byteBuf.toString(StandardCharsets.UTF_8));
     }
 }

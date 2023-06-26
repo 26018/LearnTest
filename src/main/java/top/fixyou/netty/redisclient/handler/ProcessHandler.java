@@ -20,8 +20,9 @@ public class ProcessHandler extends ChannelDuplexHandler {
 
 
     @Override
-
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+        log.info("ctx:" + ctx.hashCode());
+
         ByteBuf byteBuf = (ByteBuf) msg;
 //        log.info("write original:{}", (byteBuf.toString(StandardCharsets.UTF_8)));
         ctx.write(byteBuf, promise);
@@ -29,6 +30,9 @@ public class ProcessHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        log.info("ctx:" + ctx.hashCode());
+
+
         if (msg instanceof String) {
             return;
         }

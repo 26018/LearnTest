@@ -19,6 +19,9 @@ public class Encode extends MessageToByteEncoder<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out) throws Exception {
+        log.info("ctx:" + ctx.hashCode());
+
+
         String string = msg.toString(StandardCharsets.UTF_8);
         // 已修复 双引号内的空格不分割
         String[] commands = string.split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
