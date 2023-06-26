@@ -8,4 +8,8 @@ public class devMapTest {
     public static void main(String[] args) {
         System.out.println("this is dev map test");
     }
+
+    public void t() {
+        System.out.println("tt");
+    }
 }
